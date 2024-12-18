@@ -1,0 +1,132 @@
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: white;
+}
+
+
+.container {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 60px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.header-image {
+    width: 300px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    margin-bottom: 10px;
+    color: #333333;
+}
+
+p {
+    color: #666666;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.input-group .icon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #666666;
+}
+
+.input-group .toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 20px;
+    cursor: pointer;
+    color: #666666;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: 1px solid #cccccc;
+    border-radius: 30px;
+    font-size: 16px;
+    outline: none;
+}
+
+.options {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+button {
+    background-color: #0056b3;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #003d80;
+}
+
+a {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px 20px;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+.bt-glow {
+    display: inline-block;
+    padding: 12px 25px;
+    margin: 20px 0;
+    border: none;
+    border-radius: 8px;
+    background-color: #fdbb2d;
+    color: #000000;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: background 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 0 10px rgba(253, 187, 45, 0.7), 0 0 15px rgba(253, 187, 45, 0.5);
+}
+

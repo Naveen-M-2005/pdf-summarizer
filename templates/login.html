@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - LangChain PDF Summarizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="container">
+        <h2 class="glow-text">Login</h2>
+        <img src="{{ url_for('static', filename='img/login.jpg') }}" alt="Login Image" class="header-image">
+        <form method="POST">
+            <div class="input-group">
+                <i class="fa-solid fa-user icon"></i>
+                <input type="text" id="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-lock icon"></i>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <i class="fa-solid fa-eye toggle-password"></i>
+            </div>
+            <div class="options">
+                <label>
+                    <input type="checkbox" name="remember"> Remember me next time
+                </label>
+            </div>
+            <button type="submit" class="btn-glow">Login</button>
+        </form>
+        <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign Up</a></p>
+        <h3 class="bt-glow"><a href="{{ url_for('index') }}"style="">Home</a></h3>
+    </div>
+
+    <script> 
+        document.querySelectorAll('.toggle-password').forEach(item => {
+            item.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    this.classList.remove('fa-eye');
+                    this.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    this.classList.remove('fa-eye-slash');
+                    this.classList.add('fa-eye');
+                }
+            });
+        });
+        
+    </script>
+</body>
+</html>

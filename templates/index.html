@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangChain PDF Summarizer</title>
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+     
+        /* Preloader Styles */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+    
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+.navbar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5px;
+    background: linear-gradient(135deg, #004e92, #000428);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+   
+}
+
+.navbar .logo a {
+    font-size: 1.5rem;
+    color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 700;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    font-family: 'Jaro', sans-serif;
+
+}
+
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    font-family: 'Jaro', sans-serif;
+}
+
+.navbar .nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 20px;
+    transition: color 0.3s ease;
+    font-family: 'Jaro', sans-serif;
+}
+
+
+.nav-links a i {
+    margin-right: 8px;
+    font-size: 1.2rem;
+}
+
+
+
+
+.nav-links a:hover {
+    background: #006bbf;
+    transform: translateY(-2px);
+}
+
+/* Active Link */
+.nav-links .active {
+    background: #006bbf;
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px rgba(0, 107, 191, 0.5);
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #f39c12;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    background-color: #111;
+    color: #fff;
+}
+.background{
+    padding: 0px 90px;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 30px 25px;
+    position: fixed;
+    width: calc(100% - 40px); /* Adjust width to account for body padding */
+    top: 0;
+    left: 0px; /* Adjust left to account for body padding */
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.intro, .features, .contact {
+    padding: 100px 40px;
+    text-align: center;
+}
+
+.glowing-text {
+    font-size: 48px;
+    color: #0f0;
+    text-shadow: 0 0 30px #0f0;
+}
+
+.intro-text {
+    font-weight: bold;
+}
+
+.btn-glow {
+    border: none;
+    outline: none;
+    padding: 10px 20px;
+    background: #0f0;
+    color: #111;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-glow:hover {
+    box-shadow: 0 0 20px #0f0, 0 0 30px #0f0, 0 0 40px #0f0;
+}
+
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contact-form label {
+    margin-top: 10px;
+}
+
+.contact-form input, .contact-form textarea {
+    margin-top: 5px;
+    padding: 10px;
+    width: 300px;
+    border: none;
+    border-radius: 5px;
+}
+
+.contact-form button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.feature-grid {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.feature-card {
+    background: #222;
+    padding: 10px;
+    border-radius: 50px;
+    width: 25%; 
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #0f0;
+}
+.about {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+    background-color: #222;
+    margin: 40px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.about .content {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.about.content h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: white;
+    font-weight: bold;
+}
+
+.about .content p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: white;
+}
+
+.about .image {
+    flex: 1;
+    text-align: center;
+}
+
+.about .image img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+/* Ensure the section fits well within the existing layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.section-title {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+
+.paragraph{
+    padding: 10px;
+    word-spacing: 5px;
+   font-family:Georgia, 'Times New Roman', Times, serif
+}
+
+
+.footer {
+      background-color: #222;
+    color: #fff;
+    padding: 10px 0;
+
+    box-sizing: border-box;
+    text-align: center;
+}
+.footer .p{
+    text-align: center;
+}
+.social-links a {
+    font-size: 25px;
+    display: inline-block;
+    background: #212431;
+    color: #fff;
+    line-height: 1;
+    padding: 8px 0;
+    margin-left: 10px;
+    border-radius: 50%;
+    text-align: center;
+    width: 30px;
+    height: 25px;
+    transition: 0.3s;
+  }
+
+
+
+    </style>
+</head>
+<body> 
+    <div class="background">
+    <nav class="navbar">
+        <h2> <a href="/" class="logo">PDF Summarizer</a></h2>
+         <ul class="nav-links">
+             <li>
+                 <i class="fa-solid fa-house"></i><a href="/">Home</a></li>
+             <li><i class="fa-solid fa-upload"></i><a href="/upload_pdf">Upload PDF</a></li>
+             <li><i class="fa-solid fa-question"></i><a href="/ask_question">Ask Question</a></li>
+    
+             <li><i class="fa-solid fa-history"></i><a href="/history">History</a></li><br>
+             <li id="auth-links">
+                 <!-- Placeholder for authentication links -->
+                  
+                 {% if session['user_id'] %}
+                 <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+             {% else %}
+                 <a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                 <a href="/signup"><i class="fas fa-user-plus"></i> Sign Up</a>
+             {% endif %}
+             </li>
+         </ul>
+     </nav>
+
+     <section id="intro" class="intro">
+        <div class="container">
+                <br><br><br>
+            <h1 class="glowing-text">Welcome to AI PDF Summarizer</h1>
+            <p class="intro-text">Welcome to AI PDF Summarizer, your go-to free online tool for summarizing, translating, and understanding <br> PDF documents with easy </p>
+            <button id="get-started"class="btn-glow">Get Started</button>
+        </div>
+    </section>
+
+    
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">How to Use AI PDF Summarizer?</h2>
+            <br>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>1. Upload Your PDF</h3>
+                    <img src="{{ url_for('static', filename='img/gallery1.jpg') }}"alt=""style="width: 30%;">
+                    <p class="paragraph">Drag and drop your PDF file into the AI PDF  Summarizer,or enter the PDF URL. You can also upload directly from Google Drive (coming soon).</p>
+                </div>
+                <div class="feature-card">
+                    <h3>2. Select Language</h3>
+                    <img src="{{ url_for('static', filename='img/gallery2.jpg') }}"alt=""style="width: 30%;">
+                    <p class="paragraph">Choose the language of your PDF document to ensure accurate processing and summarization. The AI PDF Summarizer supports multiple languages, allowing you to select the one that matches your document</p>
+                </div>
+                <div class="feature-card">
+                    <h3>3. AI Query System for PDFs</h3>
+                    <img src="{{ url_for('static', filename='img/gallery3.jpg') }}"alt=""style="width: 30%;">
+                    <p class="paragraph">Ask questions about your PDF content or chat PDF with AI, translating PDF content</p>
+                </div>
+            </div>
+        </div>
+    </section>
+     
+    <section id="about"class="about">   
+        <div class="content">
+            <h2>AI Summary for any document</h2>
+            <p>A PDF AI summary tool helps you quickly understand the main points of a PDF document by creating a brief and coherent summary. You start by uploading your PDF to the tool, which then extracts and processes the text. Using advanced natural language processing, it identifies key concepts and condenses the content into a concise summary. This saves you time by allowing you to grasp essential information without having to read the entire document.
+                The tool ensures that the summary maintains the context and meaning of the original document, so you still get an accurate representation of the key points. It's particularly useful for lengthy reports, research papers, or any extensive texts where reading through everything would be time-consuming.</p>
+        </div>
+        <div class="image">
+            <img src="{{ url_for('static', filename='img/gallery6.jpg') }}"alt="">
+        </div>
+    </section>
+    
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">Key Features of PDF AI Summarizer </h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>1. Accurate AI Summary</h3>
+                    <p class="paragraph">AI summary tool is capable of discerning key points from complex content accurately. It ensures key information is captured while maintaining the original context and meaning.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>2.Multilingual Accessibility </h3>
+                    <p class="paragraph">The Multilingual Accessibility feature enables the PDF AI Summarizer to process and generate summaries in multiple languages. This ensures users worldwide can access and understand the content in their preferred language, enhancing usability and inclusivity.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>3. Time Efficiency</h3>
+                    <p class="paragraph">Processes large batches of documents quickly, significantly reducing the time required for text extraction compared to manual methods
+                        Accelerates the overall document processing pipeline, enabling faster access to critical information</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
+            <form action="/send-message" method="post" class="contact-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+                <button type="submit" class="glow-on-hover">Send Message</button>
+            </form>
+        </div>
+    </section>
+    </div>
+
+    <footer class="footer">
+        <div class="p">
+        <p>&copy; 2024 PDFs. All rights reserved.</p>
+    </div>
+    <H3>Follow US</H3>
+        <div class="social-links mt-3 text-center">
+            
+            <a href="#" class="twitter"><i class="fa-brands fa-twitter"></i></a>
+            <a href="https://www.instagram.com" class="instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="www.whatsapp.com"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="https://www.youtube.com/" class="youtube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" class="www.facebook.com"><i class="fa-brands fa-facebook"></i></a>
+          </div>
+    </footer>
+
+
+
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script>
+        window.addEventListener("load", function(){
+            document.getElementById("preloader").style.display = "none";
+        });
+    
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const isLoggedIn = localStorage.getItem('loggedIn'); // or your own method to check if user is logged in
+    
+            if (isLoggedIn) {
+                document.getElementById('login-link').style.display = 'none';
+                document.getElementById('signup-link').style.display = 'none';
+                document.getElementById('logout-link').style.display = 'block';
+            } else {
+                document.getElementById('login-link').style.display = 'block';
+                document.getElementById('signup-link').style.display += 'block';
+                document.getElementById('logout-link').style.display = 'none';
+            }
+            });
+    </script>
+
+</body>
+</html>

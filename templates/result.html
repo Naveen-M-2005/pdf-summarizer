@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='hr.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">PDF Summarizer</a>
+        <ul class="nav-links">
+            <li>
+                <i class="fa-solid fa-house"></i><a href="/">Home</a></li>
+            <li><i class="fa-solid fa-upload"></i><a href="/upload_pdf">Upload PDF</a></li>
+            <li><i class="fa-solid fa-question"></i><a href="/ask_question">Ask Question</a></li>
+   
+            <li><i class="fa-solid fa-history"></i><a href="/history">History</a></li>
+            <li id="auth-links">
+                <!-- Placeholder for authentication links -->
+                 
+                {% if session['user_id'] %}
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            {% else %}
+                <a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="/signup"><i class="fas fa-user-plus"></i> Sign Up</a>
+            {% endif %}
+            </li>
+        </ul>
+    </nav>
+    <div class="container">
+        <header>
+            <br><br>
+            <h1>Summary Result</h1>
+            <a href="{{ url_for('ask_question') }}" class="btn-primary">Ask Another Question</a>
+        </header>
+        <main>
+            <section class="summary-container">
+                <h2>Summary</h2>
+                <div class="summary-content">
+                    <p>{{ answer|safe }}</p>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <p>&copy; 2024 PDF-Summarizer</p>
+        </footer>
+    </div>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const isLoggedIn = localStorage.getItem('loggedIn');
+            document.getElementById('login-link').style.display = isLoggedIn ? 'none' : 'block';
+            document.getElementById('signup-link').style.display = isLoggedIn ? 'none' : 'block';
+            document.getElementById('logout-link').style.display = isLoggedIn ? 'block' : 'none';
+        });
+    </script>
+</body>
+</html>

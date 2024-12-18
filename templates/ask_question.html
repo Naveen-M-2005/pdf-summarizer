@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask a Question - LangChain PDF Summarizer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+       <h2> <a href="/" class="logo">PDF Summarizer</a></h2>
+        <ul class="nav-links">
+            <li>
+                <i class="fa-solid fa-house"></i><a href="/">Home</a></li>
+            <li><i class="fa-solid fa-upload"></i><a href="/upload_pdf">Upload PDF</a></li>
+            <li><i class="fa-solid fa-question"></i><a href="/ask_question">Ask Question</a></li>
+   
+            <li><i class="fa-solid fa-history"></i><a href="/history">History</a></li><br>
+            <li id="auth-links">
+                <!-- Placeholder for authentication links -->
+                 
+                {% if session['user_id'] %}
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            {% else %}
+                <a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="/signup"><i class="fas fa-user-plus"></i> Sign Up</a>
+            {% endif %}
+            </li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h2 class="glow-text">Ask a Question</h2>
+        <form action="{{ url_for('ask_question') }}" method="POST">
+            <input type="text" name="question" placeholder="Type your question" required>
+            <select name="language" required>
+                <option value="English">English</option>
+                <option value="Spanish">Spanish</option>
+                <option value="French">French</option>
+                <option value="German">German</option>
+            </select>
+            <button type="submit" class="btn-glow">Get Answer</button>
+        </form>
+    </div>
+    <script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const isLoggedIn = localStorage.getItem('loggedIn'); // or your own method to check if user is logged in
+
+        if (isLoggedIn) {
+            document.getElementById('login-link').style.display = 'none';
+            document.getElementById('signup-link').style.display = 'none';
+            document.getElementById('logout-link').style.display = 'block';
+        } else {
+            document.getElementById('login-link').style.display = 'block';
+            document.getElementById('signup-link').style.display = 'block';
+            document.getElementById('logout-link').style.display = 'none';
+        }
+        });
+    </script>
+</body>
+</html>
